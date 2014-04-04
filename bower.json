@@ -1,0 +1,14 @@
+{
+  "name": "planningpoker",
+  "version": "0.0.0",
+  "description": "web app for playing Planning Poker with Agile methodologies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "angular": "~1.2.16"
+  }
+}

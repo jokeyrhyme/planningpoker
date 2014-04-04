@@ -1,0 +1,11 @@
+.DS_Store
+
+# 3rd-party / vendor
+bower_components
+node_modules
+
+# JetBrains IntelliJ IDEA files
+/.idea/workspace.xml
+/.idea/dictionaries
+/.idea/runConfigurations
+
