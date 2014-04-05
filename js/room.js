@@ -23,11 +23,45 @@ define([
       var $scope, ws;
 
       $scope = $rootScope.$new(true);
-      ws = new WebSocket(url);
+
 
       $scope.guid = chance.guid();
       $scope.members = [ $scope.guid ];
       $scope.name = '';
+
+      $scope.connect = function () {
+        window.console.info('WebSocket connecting...');
+        ws = new WebSocket(url);
+
+        ws.onopen = function () {
+          window.console.info('WebSocket connected');
+          $scope.$emit('connected');
+          $rootScope.$evalAsync('');
+        };
+
+        ws.onmessage = function (event) {
+          var msg;
+          try {
+            msg = JSON.parse(event.data);
+            if (msg.from && $scope.members.indexOf(msg.from) === -1) {
+              $scope.members.push(msg.from);
+              $scope.send({ type: 'greetings' });
+            }
+            $scope.$emit('message', msg);
+            $rootScope.$evalAsync('');
+          } catch (ignore) {}
+        };
+
+        ws.onclose = function () {
+          window.console.info('WebSocket connection closed');
+          ws.onopen = ws.onmessage = ws.onclose = ws.onerror = null;
+          $scope.connect();
+        };
+
+        ws.onerror = function (err) {
+          window.console.error('WebSocket action failed', err);
+        };
+      };
 
       $scope.join = function (name) {
         $scope.name = name;
@@ -56,31 +90,7 @@ define([
         }
       };
 
-      ws.onopen = function () {
-        $scope.$emit('connected');
-        $rootScope.$evalAsync('');
-      };
-
-      ws.onmessage = function (event) {
-        var msg;
-        try {
-          msg = JSON.parse(event.data);
-          if (msg.from && $scope.members.indexOf(msg.from) === -1) {
-            $scope.members.push(msg.from);
-            $scope.send({ type: 'greetings' });
-          }
-          $scope.$emit('message', msg);
-          $rootScope.$evalAsync('');
-        } catch (ignore) {}
-      };
-
-      ws.onclose = function () {
-        window.console.info('WebSocket connection closed');
-      };
-
-      ws.onerror = function (err) {
-        window.console.error('WebSocket action failed', err);
-      };
+      $scope.connect();
 
       return $scope;
     }
