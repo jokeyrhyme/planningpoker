@@ -1,0 +1,13 @@
+canvas[identicon] {
+  margin: .2em;
+}
+
+ul.identicons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.identicons > li {
+  display: inline-block;
+}

@@ -6,14 +6,14 @@ require.config({
   paths: {
     angular: '../bower_components/angular/angular.min',
     Chance: '../bower_components/chance/chance',
-    qrcode: '../bower_components/qrcodejs/qrcode'
+    identicon_canvas: 'vendor/identicon_canvas'
   },
   shim: {
     angular: {
       exports: 'angular'
     },
-    qrcode: {
-      exports: 'QRCode'
+    identicon_canvas: {
+      exports: 'render_identicon'
     }
   },
   enforceDefine: true

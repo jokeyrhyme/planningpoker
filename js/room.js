@@ -5,8 +5,9 @@
 
 define([
   'angular',
-  'Chance'
-], function (ng, Chance) {
+  'Chance',
+  'identicon_canvas'
+], function (ng, Chance, render_identicon) {
   'use strict';
 
   var mod, chance, url;
@@ -137,6 +138,29 @@ define([
         }
         $scope.messages.push(message);
       });
+    }
+  ]);
+
+  mod.directive('identicon', [
+    function () {
+      return {
+        replace: true,
+        scope: {
+          identicon: '@'
+        },
+        template: '<canvas width="64" height="64"></canvas>',
+        link: function ($scope, el$) {
+          var node, code, size;
+          node = el$[0];
+          // change the UUID into a negative 32-bit integer
+          code = $scope.identicon;
+          code = code.replace(/-/g, '');
+          code = -1 * parseInt(code, 16);
+          code = code % 2.1e9;
+          size = node.width;
+          render_identicon(node, code, size);
+        }
+      };
     }
   ]);
 

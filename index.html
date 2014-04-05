@@ -12,9 +12,9 @@
 <div ng-controller="RoomCtrl">
   <h2>Room Name: {{room.name}}</h2>
   <h3>Members</h3>
-  <ul>
+  <ul class="identicons">
     <li ng-repeat="member in members">
-      {{member}}
+      <div identicon="{{member}}"></div>
     </li>
   </ul>
   <button class="pure-button" ng-click="refreshMembers()">Refresh Members</button>
@@ -31,7 +31,9 @@
   <div ng-show="stage() === 'showing'">
     <h3>Picks</h3>
     <dl>
-      <dt ng-repeat-start="(guid, pick) in picks">{{guid}}</dt>
+      <dt ng-repeat-start="(guid, pick) in picks">
+        <div identicon="{{guid}}"></div>
+      </dt>
       <dd ng-repeat-end>{{pick}}</dd>
     </dl>
   </div>
