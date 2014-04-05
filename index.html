@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Planning Poker</title>
-    <meta charset="UTF-8" />
-  </head>
-  <body>
-    <script src="bower_components/angular/angular.min.js"></script>
-  </body>
+<head>
+  <title>Planning Poker</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="bower_components/pure/pure-min.css" />
+</head>
+<body>
+<h1>Planning Poker</h1>
+<div ng-controller="RoomCtrl">
+  <h2>Room Name: {{room.name}}</h2>
+  <h3>Members</h3>
+  <ul>
+    <li ng-repeat="member in members">
+      {{member}}
+    </li>
+  </ul>
+  <button ng-click="refreshMembers()">Refresh Members</button>
+
+</div>
+<div ng-controller="LatestMessagesCtrl">
+  <h3>Latest Messages</h3>
+  <ul>
+    <li ng-repeat="message in messages">
+      {{message.from}} {{message.data | json}}
+    </li>
+  </ul>
+</div>
+<script src="bower_components/requirejs/require.js"></script>
+<script src="js/main.js"></script>
+</body>
 </html>

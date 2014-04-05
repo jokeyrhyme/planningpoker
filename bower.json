@@ -9,6 +9,8 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "angular": "~1.2.16"
+    "angular": "~1.2.16",
+    "pure": "~0.4.2",
+    "chance": "~0.5.4"
   }
 }
