@@ -90,6 +90,7 @@ define([
           $scope.members.splice(0, 1);
         }
         $scope.members.push(room.guid);
+        room.send({ type: 'greetings' });
       };
 
       if (!name) {
