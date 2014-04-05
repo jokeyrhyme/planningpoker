@@ -74,6 +74,7 @@ define([
           msg = JSON.parse(event.data);
           if (msg.from && $scope.members.indexOf(msg.from) === -1) {
             $scope.members.push(msg.from);
+            $scope.send({ type: 'greetings' });
           }
           $scope.$emit('message', msg);
           $rootScope.$evalAsync('');
