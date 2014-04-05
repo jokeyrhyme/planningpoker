@@ -3,13 +3,14 @@
 
 define([
   'angular',
-  'room'
+  'room',
+  'poker'
 ], function (ng) {
   'use strict';
 
   var app;
 
-  app = ng.module('app', ['room']);
+  app = ng.module('app', ['room', 'poker']);
 
   app.config([
     '$locationProvider',

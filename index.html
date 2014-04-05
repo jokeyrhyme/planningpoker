@@ -19,6 +19,23 @@
   </ul>
   <button class="pure-button" ng-click="refreshMembers()">Refresh Members</button>
 </div>
+<div ng-controller="PokerCtrl">
+  <h2>Poker</h2>
+  <button class="pure-button" ng-click="stage('picking')">Start Picking</button>
+  <button class="pure-button" ng-click="stage('showing')">Show Picks</button>
+  <div ng-show="stage() === 'picking'">
+    <h3>Your Estimate</h3>
+    <select ng-model="pick" ng-options="v for v in values"></select>
+    <button class="pure-button pure-button-primary" ng-click="submit()">Submit</button>
+  </div>
+  <div ng-show="stage() === 'showing'">
+    <h3>Picks</h3>
+    <dl>
+      <dt ng-repeat-start="(guid, pick) in picks">{{guid}}</dt>
+      <dd ng-repeat-end>{{pick}}</dd>
+    </dl>
+  </div>
+</div>
 <div ng-controller="LatestMessagesCtrl">
   <h2>Debugging</h2>
   <h3>Latest Messages</h3>
