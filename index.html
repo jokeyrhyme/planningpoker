@@ -20,8 +20,11 @@
 
 </div>
 <div ng-controller="LatestMessagesCtrl">
+  <h2>Debugging</h2>
   <h3>Latest Messages</h3>
-  <ul>
+  <button class="pure-button" ng-click="show()">Show</button>
+  <button class="pure-button" ng-click="hide()">Hide</button>
+  <ul ng-if="isVisible">
     <li ng-repeat="message in messages">
       {{message.from}} {{message.data | json}}
     </li>

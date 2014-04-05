@@ -118,7 +118,17 @@ define([
   mod.controller('LatestMessagesCtrl', [
     '$scope', 'room',
     function ($scope, room) {
+      $scope.isVisible = false;
       $scope.messages = [];
+
+      $scope.show = function () {
+        $scope.isVisible = true;
+      };
+
+      $scope.hide = function () {
+        $scope.isVisible = false;
+      };
+
       room.$on('message', function (event, message) {
         if ($scope.messages.length > 10) {
           $scope.messages.shift();
