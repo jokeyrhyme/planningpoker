@@ -22,8 +22,12 @@ define([
 
       stage = 'picking'; // or 'showing' later
       $scope.stage = function (value) {
-        if (value === 'picking' || value === 'showing') {
+        if ((value === 'picking' || value === 'showing') && value !== stage) {
           stage = value;
+          room.send({
+            type: 'poker.stage',
+            data: value
+          });
         }
         return stage;
       };
@@ -41,6 +45,9 @@ define([
       room.$on('message', function (event, msg) {
         if (msg.type === 'poker.pick') {
           $scope.picks[msg.from] = msg.data;
+        }
+        if (msg.type === 'poker.stage') {
+          $scope.stage(msg.data);
         }
       });
 
