@@ -73,6 +73,14 @@ define([
         } catch (ignore) {}
       };
 
+      ws.onclose = function () {
+        window.console.info('WebSocket connection closed');
+      };
+
+      ws.onerror = function (err) {
+        window.console.error('WebSocket action failed', err);
+      };
+
       return $scope;
     }
   ]);
