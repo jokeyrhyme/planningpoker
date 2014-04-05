@@ -58,14 +58,6 @@ define([
       ws.onopen = function () {
         $scope.$emit('connected');
         $rootScope.$evalAsync('');
-        setInterval(function () {
-          var random;
-          random = Math.random();
-          $scope.send({
-            type: 'random',
-            data: random
-          });
-        }, 5e3);
       };
 
       ws.onmessage = function (event) {
