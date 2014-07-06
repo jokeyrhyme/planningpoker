@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+layout-biggest-square {
+  text-align: center;
+}
+
+fit-text {
+  font-family: monospace;
+}
+
+paper-slider {
+  width: 100%;
+}
+
+body[layout] {
+  justify-content: center;
+  align-items: center;
+}

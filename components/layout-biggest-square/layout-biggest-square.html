@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../throttled-resize/throttled-resize.html" />
+<polymer-element name="layout-biggest-square">
+  <template>
+    <style>
+    :host {
+      display: inline-block;
+      position: relative;
+    }
+    </style>
+    <content></content>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+    var resizeHandler, throttledResize;
+
+    resizeHandler = function (event) {
+      var edge, parent, rect;
+      if (this instanceof Element) {
+        parent = this.offsetParent || document.body;
+        rect = parent.getBoundingClientRect();
+        edge = Math.min(rect.height, rect.width);
+        this.style.height = edge + 'px';
+        this.style.width = edge + 'px';
+      }
+    };
+
+    Polymer('layout-biggest-square', {
+      isContainer: true,
+      ready: function () {
+        if (!throttledResize) {
+          throttledResize = document.body.querySelector('throttled-resize');
+        }
+        if (!throttledResize) {
+          throttledResize = document.createElement('throttled-resize');
+          document.body.appendChild(throttledResize);
+        }
+      },
+      attached: function () {
+        this.resizeHandler = resizeHandler.bind(this);
+        throttledResize.addEventListener('resize', this.resizeHandler, false);
+        this.resizeHandler();
+      },
+      dettached: function () {
+        throttledResize.removeEventListener('resize', this.resizeHandler, false);
+      }
+    });
+  }());
+  </script>
+</polymer-element>

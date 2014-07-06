@@ -1,0 +1,49 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<polymer-element name="fit-text">
+  <template>
+    <style>
+    :host {
+      display: block;
+      overflow: hidden;
+    }
+    </style>
+    <content></content>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+    var resizeHandler, throttledResize;
+
+    resizeHandler = function (event) {
+      var parent, delta, step, size;
+      parent = this.offsetParent;
+      if (parent.style.height) {
+        this.style.lineHeight = parent.style.height;
+      }
+      this.style.fontSize = Math.ceil(0.6 * 2 * (parent.clientWidth / (this.textContent.length || 1))) + 'px';
+    };
+
+    Polymer('fit-text', {
+      isContainer: true,
+      ready: function () {
+        if (!throttledResize) {
+          throttledResize = document.body.querySelector('throttled-resize');
+        }
+        if (!throttledResize) {
+          throttledResize = document.createElement('throttled-resize');
+          document.body.appendChild(throttledResize);
+        }
+      },
+      attached: function () {
+        this.resizeHandler = resizeHandler.bind(this);
+        throttledResize.addEventListener('resize', this.resizeHandler, false);
+        this.resizeHandler();
+      },
+      dettached: function () {
+        throttledResize.removeEventListener('resize', this.resizeHandler, false);
+      }
+    });
+  }());
+  </script>
+</polymer-element>

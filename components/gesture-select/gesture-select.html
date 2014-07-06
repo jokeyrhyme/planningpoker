@@ -1,0 +1,108 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/core-layout/core-layout.html" />
+
+<script src="../../bower_components/hammerjs/hammer.js"></script>
+
+<polymer-element name="gesture-select" attributes="options selected">
+  <template>
+    <style>
+    :host {
+      font-family: sans-serif;
+    }
+
+    polyfill-next-selector { content: ':host #modal'; }
+    :host #modal {
+      position: absolute;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+
+      opacity: 0.0;
+      transition-duration: .3s;
+      transition-property: opacity;
+    }
+
+    polyfill-next-selector { content: ':host #modal.visible'; }
+    :host #modal.visible {
+      opacity: 1.0;
+    }
+
+    polyfill-next-selector { content: ':host .option'; }
+    :host .option {
+      position: relative;
+      flex-grow: 1;
+      text-align: center;
+      vertical-align: middle;
+      pointer-events: none;
+
+      font-size: 300%;
+
+      background-color: rgba(0, 0, 0, 0.0);
+      transition-duration: .3s;
+      transition-property: background-color;
+    }
+
+    polyfill-next-selector { content: ':host .option.selected'; }
+    :host .option.selected {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    </style>
+    <div id="modal" vertical layout>
+      <template if="{{options.length}}" repeat="{{value, index in options}}">
+        <div class="option {{index == selected ? 'selected' : ''}}"></div>
+      </template>
+    </div>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+
+    var dragHandler;
+
+    dragHandler = function (event) {
+      var me;
+      me = this;
+      requestAnimationFrame(function () {
+      var el, point, index;
+        if (event.type === 'dragstart') {
+          me.$.modal.classList.add('visible');
+        } else if (event.type === 'dragend') {
+          me.$.modal.classList.remove('visible');
+        }
+        point = event.gesture.center;
+        index = Math.floor(point.clientY / me.optionHeight);
+        me.selected = index;
+      });
+    };
+
+    Polymer('gesture-select', {
+      isContainer: false,
+      ready: function () {
+      },
+      attached: function () {
+        this.options = this.options || {};
+        this.dragHandler = dragHandler.bind(this);
+        this.optionsChanged();
+        Hammer(this.$.modal).on('dragstart drag dragend', this.dragHandler);
+      },
+      dettached: function () {
+        Hammer(this.$.modal).off('dragstart drag dragend', this.dragHandler);
+      },
+      attributeChanged: function (attribute, oldVal, newVal) {
+        if (attribute === 'options') {
+          this.optionsChanged(oldVal, newVal);
+        }
+      },
+      optionsChanged: function (oldVal, newVal) {
+        var count;
+        count = Array.isArray(this.options) ? this.options.length: Object.keys(this.options).length;
+        this.optionsCount = count;
+        this.optionHeight = window.innerHeight / this.optionsCount;
+      }
+    });
+  }());
+  </script>
+</polymer-element>

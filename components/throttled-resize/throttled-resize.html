@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<polymer-element name="throttled-resize">
+  <template>
+    <style>
+    :host {
+      display: none;
+    }
+    </style>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+    var resizeHandler, throttleFn;
+
+    throttleFn = function (fn, interval) {
+      var isThrottled, timer, isPending;
+      interval = interval || 197;
+      isThrottled = false;
+      isPending = false;
+      return function () {
+        var me, args;
+        me = this;
+        args = arguments;
+        if (!isThrottled) {
+          fn.apply(me, args);
+          isThrottled = true;
+          if (!timer) {
+            timer = setTimeout(function () {
+              timer = null;
+              isThrottled = false;
+              if (isPending) {
+                isPending = false;
+                fn.apply(me, args);
+              }
+            }, interval)
+          }
+        } else {
+          isPending = true;
+        }
+      };
+    };
+
+    resizeHandler = function (event) {
+      this.dispatchEvent(new Event(event.type || 'resize'));
+    };
+
+    Polymer('throttled-resize', {
+      attached: function () {
+        this.resizeHandler = throttleFn(resizeHandler).bind(this);
+        window.addEventListener('resize', this.resizeHandler, false);
+        window.dispatchEvent(new Event('resize'));
+      },
+      dettached: function () {
+        window.removeEventListener('resize', this.resizeHandler, false);
+      }
+    });
+  }());  </script>
+</polymer-element>

@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<polymer-element name="layout-long-direction">
+  <template>
+    <style>
+    :host {
+      display: none;
+    }
+    </style>
+    <content></content>
+  </template>
+  <script>
+  (function () {
+    'use strict';
+
+    var resizeHandler, throttledResize;
+
+    resizeHandler = function () {
+      var parent;
+      parent = this.parentNode;
+      if (parent && (parent.hasAttribute('vertical') || parent.hasAttribute('horizontal'))) {
+        if (window.innerHeight >= window.innerWidth) {
+          parent.removeAttribute('horizontal');
+          parent.setAttribute('vertical', '');
+        } else {
+          parent.removeAttribute('vertical');
+          parent.setAttribute('horizontal', '');
+        }
+      }
+    };
+
+    Polymer('layout-long-direction', {
+      isContainer: false,
+      ready: function () {
+        if (!throttledResize) {
+          throttledResize = document.body.querySelector('throttled-resize');
+        }
+        if (!throttledResize) {
+          throttledResize = document.createElement('throttled-resize');
+          document.body.appendChild(throttledResize);
+        }
+      },
+      attached: function () {
+        this.resizeHandler = resizeHandler.bind(this);
+        throttledResize.addEventListener('resize', this.resizeHandler, false);
+        this.resizeHandler();
+      },
+      dettached: function () {
+        throttledResize.removeEventListener('resize', this.resizeHandler, false);
+      }
+    });
+  }());
+  </script>
+</polymer-element>
